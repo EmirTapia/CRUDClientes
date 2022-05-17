@@ -1,0 +1,111 @@
+﻿@using OneCore.API.Models
+@model List<OneCore.API.Models.Cliente>
+@{
+    ViewData["Title"] = "Listado de clientes";
+}
+<div class="col-lg-12">
+    <div class="col-md-12">
+        <button class="btn btn-outline-info btn-block" type="button" onclick="showCreateModal()">
+            Agregar nuevo cliente
+            <i class="fas fa-plus"></i>
+        </button>
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="instructionsLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body justify-content-center">
+                                        @await Html.PartialAsync("_Create", new Cliente())
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+    </br>
+        @if (Model is null || Model?.Count is 0)
+        {
+            <div class="col-lg-12">
+                <div class="col-md-12">
+                    <div class="card bg-c-green order-card">
+                        <div class="card-block">
+                            <h6 class="text-center">No hay registros por mostrar :(</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="container-fluid content-row">
+
+                <div class="row my-flex-card" >
+                    @{
+                        int numeroCliente = 0;
+                    }
+                    @foreach (var item in Model)
+                    {
+                        { numeroCliente++; }
+                        <div class="col-md-4">
+                            <div class="card text-dark border-info order-card">
+                                <div class="card-block">
+                                    <h6 class="text-center m-b-20">Cliente # @numeroCliente</h6><hr>
+                                    <h6 class="text-center"><i class="fa fa-user f-left"></i><span>@item.Nombre</span></h6><hr>
+                                    <h6 class="text-center"><i class="fa fa-envelope f-left"></i><span>@item.CorreoContacto</span></h6><hr>
+                                    <h6 class="text-center"><i class="fa fa-id-card f-left"></i><span>@item.Rfc</span></h6><hr>
+                                    <h6 class="text-center"><i class="fa fa-map-marker f-left"></i><span>@item.Direccion</span></h6>
+                                </div>
+                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#modificar-@item.Id"><i class="fa fa-edit"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#eliminar-@item.Id"><i class="fa fa-trash"></i></button>
+                                </div>
+                                <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                    <button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#productos-@item.Id"><i class="fa fa-list"></i></button>
+                                </div>
+
+                            </div>
+                        </div>
+                        
+                        <div class="modal fade" id="modificar-@item.Id" tabindex="-1" role="dialog" aria-labelledby="instructionsLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body justify-content-center">
+                                        @await Html.PartialAsync("_Create", Model.Where(x=>x.Id == item.Id ).First())
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="eliminar-@item.Id" tabindex="-1" role="dialog" aria-labelledby="instructionsLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body justify-content-center">
+                                        @await Html.PartialAsync("_Delete", Model.Where(x=>x.Id == item.Id ).First())
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="productos-@item.Id" tabindex="-1" role="dialog" aria-labelledby="instructionsLabel">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body justify-content-center">
+                                        @await Html.PartialAsync("_Productos", new Models.ProductosViewModel{ Productos = item.Productos, ClienteId = item.Id})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<br />
+
+
+@section Scripts 
+{
+<script>
+    function showCreateModal()
+    {
+        $("#createModal").modal('show');
+    }
+
+</script>
+}

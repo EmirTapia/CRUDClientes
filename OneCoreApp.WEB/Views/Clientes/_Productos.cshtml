@@ -1,0 +1,66 @@
+﻿@model OneCore.WEB.Models.ProductosViewModel
+<form asp-action="Agregar" asp-controller="Productos">
+    <input asp-for="ClienteId" name="id" hidden/>
+    <div class="form-group">
+        <input type="submit" value="Cargar productos (.XLSX)" class="btn btn-outline-info btn-block" id="btn" />
+    </div>
+</form>
+@if (Model == null)
+{
+    <p>No hay registros</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.Raw("Cantidad")
+                </th>
+                <th>
+                    @Html.Raw("Precio")
+                </th>
+                <th>
+                    @Html.Raw("Total")
+                </th>
+                <th>
+                    @Html.Raw("Descripcion")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ClienteId)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Productos)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cantidad)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Precio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Descripcion)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ClienteId)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $( document ).ready(function() {
+          $('#btn').val("Cargar productos (.XLSX)");
+    });
+   
+</script>
+
